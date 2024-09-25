@@ -604,6 +604,8 @@
 		ctx.textAlign = "center";
 		ctx.lineWidth = 4;
 		const metrics = ctx.measureText("R");
+		const halfHeight = (metrics.actualBoundingBoxAscent - metrics.actualBoundingBoxDescent) / 2;
+
 		const transform = ctx.getTransform();
 		for(const skill of $project.skills){
 			ctx.setTransform(
@@ -616,8 +618,8 @@
 			);
 			jdenticon.drawIcon(ctx, skill.definition.icon, 26, $theme["jdenticon-config"]);
 			if(skill.root){
-				ctx.strokeText("R", 13, 13 + (metrics.actualBoundingBoxAscent - metrics.actualBoundingBoxDescent) / 2);
-				ctx.fillText("R", 13, 13 + (metrics.actualBoundingBoxAscent - metrics.actualBoundingBoxDescent) / 2);
+				ctx.strokeText("R", 13, 13 + halfHeight);
+				ctx.fillText("R", 13, 13 + halfHeight);
 			}
 		}
 		ctx.setTransform(
