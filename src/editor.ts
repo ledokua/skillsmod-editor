@@ -101,8 +101,7 @@ export function loadSettings(): Settings {
 		return {
 			theme
 		};
-	} catch (e){
-		console.error(e);
+	} catch {
 		return {
 			theme: PreferredTheme.AUTOMATIC
 		}
