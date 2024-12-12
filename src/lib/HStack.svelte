@@ -8,7 +8,7 @@
 
 <style lang="scss">
 	div {
-		flex: 1;
+		flex: 1 auto;
 		display: flex;
 		flex-direction: row;
 		align-items: stretch;

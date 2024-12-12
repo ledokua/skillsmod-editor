@@ -29,7 +29,7 @@
 
 <style lang="scss">
 	.file-input {
-		flex: 1;
+		flex: 1 auto;
 		color: inherit;
 		background-color: var(--button-background-color);
 		border: 1px solid var(--button-border-color);

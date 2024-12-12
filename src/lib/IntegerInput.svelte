@@ -7,7 +7,7 @@
 
 <style lang="scss">
 	input {
-		flex: 1;
+		flex: 1 auto;
 		width: 100%;
 		color: inherit;
 		background-color: var(--input-background-color);

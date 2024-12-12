@@ -6,8 +6,7 @@
 
 <style lang="scss">
 	div {
-		flex-grow: 1;
-		flex-shrink: 0.5;
+		flex: 1 auto;
 		font-size: 16px;
 		display: flex;
 		justify-content: center;

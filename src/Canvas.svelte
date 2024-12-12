@@ -765,7 +765,7 @@
 
 <style lang="scss">
 	.container{
-		flex: 1;
+		flex: 1 auto;
 		position: relative;
 	}
 	canvas {
