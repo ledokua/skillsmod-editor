@@ -64,6 +64,10 @@ export interface Project {
 
 export interface Settings {
 	theme: PreferredTheme;
+	visibility: {
+		normal: boolean;
+		exclusive: boolean;
+	}
 }
 
 export interface State {
@@ -86,7 +90,7 @@ export function saveSettings(settings: Settings) {
 
 export function loadSettings(): Settings {
 	try {
-		const settingsJson: Record<string, unknown> = JSON.parse(localStorage.getItem("settings") ?? "");
+		const settingsJson = JSON.parse(localStorage.getItem("settings") ?? "");
 
 		let theme = PreferredTheme.AUTOMATIC;
 		switch(settingsJson.theme){
@@ -99,11 +103,19 @@ export function loadSettings(): Settings {
 		}
 
 		return {
-			theme
+			theme,
+			visibility: {
+				normal: !!settingsJson.visibility.normal,
+				exclusive: !!settingsJson.visibility.exclusive
+			}
 		};
 	} catch {
 		return {
-			theme: PreferredTheme.AUTOMATIC
+			theme: PreferredTheme.AUTOMATIC,
+			visibility: {
+				normal: true,
+				exclusive: true
+			}
 		}
 	}
 }

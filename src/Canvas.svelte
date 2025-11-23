@@ -8,6 +8,7 @@
 	let grid = getContext<Writable<editor.Grid>>("grid");
 	let project = getContext<Writable<editor.Project>>("project");
 	let state = getContext<Writable<editor.State>>("state");
+	let settings = getContext<Writable<editor.Settings>>("settings");
 
 	let tooltipElement: HTMLDivElement;
 	let canvasElement: HTMLCanvasElement;
@@ -653,12 +654,14 @@
 
 	function drawConnections(){
 		for(const connection of $project.connections){
+			ctx.globalAlpha = $settings.visibility[connection.type] ? 1 : 0.1;
 			drawArrow(
 				connection.skills[0].pos,
 				connection.skills[1].pos,
 				connection.type,
 				connection.direction
 			);
+			ctx.globalAlpha = 1;
 		}
 
 		if(previousSkill !== null){

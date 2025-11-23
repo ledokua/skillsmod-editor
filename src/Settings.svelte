@@ -7,12 +7,14 @@
 	import { getContext } from "svelte";
 	import Select from "./lib/Select.svelte";
 	import { PreferredTheme } from "./theme";
+	import Checkbox from "./lib/Checkbox.svelte";
+	import Divider from "./lib/Divider.svelte";
 
 	let settings = getContext<Writable<editor.Settings>>("settings");
 
 </script>
 
-<div class="container">
+<div class="theme-container">
 	<HStack>
 		<Text>Theme:</Text>
 		<Spacer />
@@ -23,11 +25,30 @@
 		<option value={PreferredTheme.DARK}>Dark</option>
 	</Select>
 </div>
+<Divider />
+<div class="option-container">
+	<HStack>
+		<Text>Show normal connections:</Text>
+		<Spacer />
+	</HStack>
+	<Checkbox bind:checked={$settings.visibility.normal} />
+	<HStack>
+		<Text>Show exclusive connections:</Text>
+		<Spacer />
+	</HStack>
+	<Checkbox bind:checked={$settings.visibility.exclusive} />
+</div>
 
 <style lang="scss">
-	.container{
+	.theme-container{
 		display: grid;
 		grid-template-columns: auto 1fr;
 		gap: 2px 8px;
+	}
+	.option-container{
+		display: grid;
+		grid-template-columns: auto 20px;
+		grid-template-rows: 20px;
+		gap: 2px;
 	}
 </style>
