@@ -93,8 +93,16 @@
 					y: mouse.y
 				};
 			}else{
-				if(!selectedSkills.includes(draggedSkill)){
-					selectedSkills = [draggedSkill];
+				if(selectedSkills.includes(draggedSkill)){
+					if(event.ctrlKey){
+						selectedSkills = selectedSkills.filter(s => s !== draggedSkill)
+					}
+				}else{
+					if(event.ctrlKey || event.shiftKey){
+						selectedSkills = [...selectedSkills, draggedSkill];
+					}else{
+						selectedSkills = [draggedSkill];
+					}
 				}
 				skillDragStartPos = {
 					x: transformedMouse.x - draggedSkill.pos.x,
@@ -127,11 +135,19 @@
 		case editor.Button.LEFT:
 			if(selectionStartPos !== null){
 				const startPos = selectionStartPos;
-				selectedSkills = $project.skills.filter((skill) => isSkillInsideSelection(
+				const skillsInsideSelection = $project.skills.filter((skill) => isSkillInsideSelection(
 					skill,
 					screenToEditorPos(startPos),
 					transformedMouse
 				));
+				if(event.ctrlKey){
+					selectedSkills = [...new Set([...selectedSkills, ...skillsInsideSelection])]
+							.filter(s => selectedSkills.includes(s) !== skillsInsideSelection.includes(s));
+				}else if(event.shiftKey){
+					selectedSkills = [...new Set([...selectedSkills, ...skillsInsideSelection])];
+				}else{
+					selectedSkills = skillsInsideSelection;
+				}
 				selectionStartPos = null;
 			}
 			skillDragStartPos = null;
