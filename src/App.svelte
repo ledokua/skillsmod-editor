@@ -29,12 +29,13 @@
 </script>
 
 <div class="container">
-	<Sidebar />
 	<Canvas />
+	<Sidebar />
 </div>
 
 <style lang="scss">
 	.container {
+		position: relative;
 		width: 100%;
 		height: 100%;
 		display: flex;
