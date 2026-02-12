@@ -21,7 +21,6 @@
 		<option value={editor.GridType.SQUARE}>Square</option>
 		<option value={editor.GridType.HEX_FLAT}>Hex: Flat</option>
 		<option value={editor.GridType.HEX_POINTY}>Hex: Pointy</option>
-		<option value={editor.GridType.RADIAL_12}>Radial 12</option>
 	</Select>
 	<HStack>
 		<Text>Spacing:</Text>

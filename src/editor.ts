@@ -42,7 +42,6 @@ export enum GridType {
 	SQUARE,
 	HEX_FLAT,
 	HEX_POINTY,
-	RADIAL_12,
 }
 
 export enum Button {

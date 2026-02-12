@@ -526,33 +526,6 @@
 					return {x: j, y: i};
 				}
 			})();
-		case editor.GridType.RADIAL_12:
-			// eslint-disable-next-line no-case-declarations
-			const r12_angle = Math.atan2(pos.y, pos.x);
-			// eslint-disable-next-line no-case-declarations
-			const r12_radius = Math.sqrt(pos.x * pos.x + pos.y * pos.y);
-			// eslint-disable-next-line no-case-declarations
-			const r12_i = Math.round(r12_radius / $grid.spacing);
-
-			if (r12_i === 0) {
-				return {x: 0, y: 0};
-			}
-
-			// eslint-disable-next-line no-case-declarations
-			const r12_snappedRadius = r12_i * $grid.spacing;
-			// eslint-disable-next-line no-case-declarations
-			let r12_numPoints = Math.round((2 * Math.PI * r12_i) / 12) * 12;
-			if (r12_numPoints < 12) r12_numPoints = 12;
-
-			// eslint-disable-next-line no-case-declarations
-			const r12_angleStep = 2 * Math.PI / r12_numPoints;
-			// eslint-disable-next-line no-case-declarations
-			const r12_snappedAngle = Math.round(r12_angle / r12_angleStep) * r12_angleStep;
-
-			return {
-				x: r12_snappedRadius * Math.cos(r12_snappedAngle),
-				y: r12_snappedRadius * Math.sin(r12_snappedAngle)
-			};
 		}
 	}
 
@@ -642,21 +615,6 @@
 					}else{
 						addDot(i, k);
 					}
-				}
-			}
-			break;
-		case editor.GridType.RADIAL_12:
-			addCircle(0, 0, 8);
-			for(let i = 1; i <= $grid.size; i++){
-				const radius = i * $grid.spacing;
-				let numPoints = Math.round((2 * Math.PI * i) / 12) * 12;
-				if (numPoints < 12) numPoints = 12;
-
-				const angleStep = 2 * Math.PI / numPoints;
-
-				for(let j = 0; j < numPoints; j++){
-					const angle = j * angleStep;
-					addCircle(radius * Math.cos(angle), radius * Math.sin(angle), 5);
 				}
 			}
 			break;
