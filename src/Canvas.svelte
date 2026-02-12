@@ -485,37 +485,6 @@
 		return mouse.x > skill.pos.x - 13 && mouse.y > skill.pos.y - 13 && mouse.x < skill.pos.x + 13 && mouse.y < skill.pos.y + 13;
 	}
 
-	function snapToHex(pos: editor.Position, flat: boolean): editor.Position {
-		let i;
-		let j;
-
-		if(flat){
-			i = pos.x;
-			j = pos.y;
-		}else{
-			i = pos.y;
-			j = pos.x;
-		}
-
-		const s = $grid.spacing * Math.sqrt(3) / 1.5;
-
-		i /= s;
-		j = j * 1.5 / $grid.spacing - 1;
-
-		let k = Math.floor(i - j);
-		let l = Math.floor((k + 2 * i + 1) / 3);
-		let m = Math.floor((k - j - i) / 3);
-
-		i = l * s - m * s / 2;
-		j = -m * $grid.spacing;
-
-		if(flat){
-			return {x: i, y: j};
-		}else{
-			return {x: j, y: i};
-		}
-	}
-
 	function snapToGrid(pos: editor.Position): editor.Position {
 		switch($grid.type){
 		case editor.GridType.NONE:
