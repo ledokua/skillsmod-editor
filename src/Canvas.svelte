@@ -586,18 +586,14 @@
 
 		drawGrid();
 
-		const connectionsHidden = !$settings.visibility.normal && !$settings.visibility.exclusive;
-
-		if (connectionsHidden) {
-			// Draw highlighted connections under skills
-			drawConnections(true);
-			drawSkills();
-			drawConnections(false); // Will draw nothing, but keeps logic consistent
-		} else {
-			// Draw highlighted connections on top of skills
+		if ($settings.renderHighlightedOnTop) {
 			drawConnections(false);
 			drawSkills();
 			drawConnections(true);
+		} else {
+			drawConnections(false);
+			drawConnections(true);
+			drawSkills();
 		}
 
 		ctx.setTransform(1, 0, 0, 1, 0, 0);

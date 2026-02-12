@@ -37,6 +37,11 @@
 		<Spacer />
 	</HStack>
 	<Checkbox bind:checked={$settings.visibility.exclusive} />
+	<HStack>
+		<Text>Render highlighted lines ontop:</Text>
+		<Spacer />
+	</HStack>
+	<Checkbox bind:checked={$settings.renderHighlightedOnTop} />
 </div>
 
 <style lang="scss">
