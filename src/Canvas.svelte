@@ -485,37 +485,6 @@
 		return mouse.x > skill.pos.x - 13 && mouse.y > skill.pos.y - 13 && mouse.x < skill.pos.x + 13 && mouse.y < skill.pos.y + 13;
 	}
 
-	function snapToHex(pos: editor.Position, flat: boolean): editor.Position {
-		let i;
-		let j;
-
-		if(flat){
-			i = pos.x;
-			j = pos.y;
-		}else{
-			i = pos.y;
-			j = pos.x;
-		}
-
-		const s = $grid.spacing * Math.sqrt(3) / 1.5;
-
-		i /= s;
-		j = j * 1.5 / $grid.spacing - 1;
-
-		let k = Math.floor(i - j);
-		let l = Math.floor((k + 2 * i + 1) / 3);
-		let m = Math.floor((k - j - i) / 3);
-
-		i = l * s - m * s / 2;
-		j = -m * $grid.spacing;
-
-		if(flat){
-			return {x: i, y: j};
-		}else{
-			return {x: j, y: i};
-		}
-	}
-
 	function snapToGrid(pos: editor.Position): editor.Position {
 		switch($grid.type){
 		case editor.GridType.NONE:
@@ -616,8 +585,20 @@
 		ctx.setTransform(viewScale, 0, 0, viewScale, viewPos.x + width / 2, viewPos.y + height / 2);
 
 		drawGrid();
-		drawConnections();
-		drawSkills();
+
+		const connectionsHidden = !$settings.visibility.normal && !$settings.visibility.exclusive;
+
+		if (connectionsHidden) {
+			// Draw highlighted connections under skills
+			drawConnections(true);
+			drawSkills();
+			drawConnections(false); // Will draw nothing, but keeps logic consistent
+		} else {
+			// Draw highlighted connections on top of skills
+			drawConnections(false);
+			drawSkills();
+			drawConnections(true);
+		}
 
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
 
@@ -741,30 +722,44 @@
 		ctx.fill();
 	}
 
-	function drawConnections(){
+	function drawConnections(drawHighlighted: boolean){
+		const singleSelectedSkill = selectedSkills.length === 1 ? selectedSkills[0] : null;
+
 		for(const connection of $project.connections){
-			ctx.globalAlpha = $settings.visibility[connection.type] ? 1 : 0.1;
+			const isHighlighted = singleSelectedSkill ? connection.skills.includes(singleSelectedSkill) : false;
+
+			if (isHighlighted !== drawHighlighted) {
+				continue;
+			}
+
+			if (isHighlighted) {
+				ctx.globalAlpha = 1;
+			} else {
+				ctx.globalAlpha = $settings.visibility[connection.type] ? 1 : 0.1;
+			}
+
 			drawArrow(
 				connection.skills[0].pos,
 				connection.skills[1].pos,
 				connection.type,
-				connection.direction
+				connection.direction,
+				isHighlighted
 			);
 			ctx.globalAlpha = 1;
 		}
 
-		if(previousSkill !== null){
+		if(!drawHighlighted && previousSkill !== null){
 			drawArrow(
 				previousSkill.pos,
 				transformedMouse,
 				$state.selectedConnectionType,
-				$state.selectedConnectionDirection
+				$state.selectedConnectionDirection,
+				false
 			);
 		}
-
 	}
 
-	function drawArrow(start: editor.Position, end: editor.Position, type: editor.ConnectionType, direction: editor.ConnectionDirection){
+	function drawArrow(start: editor.Position, end: editor.Position, type: editor.ConnectionType, direction: editor.ConnectionDirection, highlighted: boolean){
 		switch(type){
 		case editor.ConnectionType.NORMAL:
 			ctx.strokeStyle = $theme["editor-normal-connection-color"];
@@ -774,7 +769,7 @@
 			break;
 		}
 
-		ctx.lineWidth = 3;
+		ctx.lineWidth = highlighted ? 6 : 3;
 		ctx.beginPath();
 		ctx.setLineDash([]);
 
