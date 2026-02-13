@@ -6,11 +6,11 @@
 	import { setContext } from "svelte";
 	import { FallbackTheme, applyTheme } from "./theme";
 
-	setContext("grid", writable<editor.Grid>({
-		type: editor.GridType.SQUARE,
-		spacing: 32,
-		size: 8
-	}));
+	const settings = editor.persistent<editor.Settings>(editor.saveSettings, editor.loadSettings);
+	setContext("settings", settings);
+
+	const grid = editor.persistent<editor.Grid>(editor.saveGrid, editor.loadGrid);
+	setContext("grid", grid);
 
 	setContext("project", editor.persistent<editor.Project>(editor.saveProject, editor.loadProject));
 
@@ -19,9 +19,6 @@
 		selectedConnectionType: editor.ConnectionType.NORMAL,
 		selectedConnectionDirection: editor.ConnectionDirection.BIDIRECTIONAL
 	}));
-
-	const settings = editor.persistent<editor.Settings>(editor.saveSettings, editor.loadSettings);
-	setContext("settings", settings);
 
 	const systemTheme = editor.systemTheme();
 

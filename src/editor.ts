@@ -120,6 +120,27 @@ export function loadSettings(): Settings {
 	}
 }
 
+export function saveGrid(grid: Grid) {
+	localStorage.setItem("grid", JSON.stringify(grid));
+}
+
+export function loadGrid(): Grid {
+	try {
+		const gridJson = JSON.parse(localStorage.getItem("grid") ?? "");
+		return {
+			type: gridJson.type ?? GridType.SQUARE,
+			spacing: gridJson.spacing ?? 32,
+			size: gridJson.size ?? 10,
+		};
+	} catch {
+		return {
+			type: GridType.SQUARE,
+			spacing: 32,
+			size: 10,
+		}
+	}
+}
+
 export function saveProject(project: Project) {
 	const definitionsJson = Array.from(project.definitions.values()).reduce((json, definition) => {
 		json[definition.id] = {
