@@ -67,7 +67,8 @@ export interface Settings {
 	visibility: {
 		normal: boolean;
 		exclusive: boolean;
-	}
+	};
+	grid: Grid;
 }
 
 export interface State {
@@ -107,6 +108,11 @@ export function loadSettings(): Settings {
 			visibility: {
 				normal: !!settingsJson.visibility.normal,
 				exclusive: !!settingsJson.visibility.exclusive
+			},
+			grid: {
+				type: settingsJson.grid?.type ?? GridType.SQUARE,
+				spacing: settingsJson.grid?.spacing ?? 32,
+				size: settingsJson.grid?.size ?? 10,
 			}
 		};
 	} catch {
@@ -115,6 +121,11 @@ export function loadSettings(): Settings {
 			visibility: {
 				normal: true,
 				exclusive: true
+			},
+			grid: {
+				type: GridType.SQUARE,
+				spacing: 32,
+				size: 10,
 			}
 		}
 	}

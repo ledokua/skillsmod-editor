@@ -5,10 +5,9 @@
 	import * as jdenticon from "jdenticon";
     import { activeTheme } from "./theme";
 
-	let grid = getContext<Writable<editor.Grid>>("grid");
+	let settings = getContext<Writable<editor.Settings>>("settings");
 	let project = getContext<Writable<editor.Project>>("project");
 	let state = getContext<Writable<editor.State>>("state");
-	let settings = getContext<Writable<editor.Settings>>("settings");
 
 	let tooltipElement: HTMLDivElement;
 	let canvasElement: HTMLCanvasElement;
@@ -486,13 +485,13 @@
 	}
 
 	function snapToGrid(pos: editor.Position): editor.Position {
-		switch($grid.type){
+		switch($settings.grid.type){
 		case editor.GridType.NONE:
 			return pos;
 		case editor.GridType.SQUARE:
 			return {
-				x: Math.round(pos.x / $grid.spacing) * $grid.spacing,
-				y: Math.round(pos.y / $grid.spacing) * $grid.spacing
+				x: Math.round(pos.x / $settings.grid.spacing) * $settings.grid.spacing,
+				y: Math.round(pos.y / $settings.grid.spacing) * $settings.grid.spacing
 			};
 		case editor.GridType.HEX_FLAT:
 		case editor.GridType.HEX_POINTY:
@@ -500,7 +499,7 @@
 				let i;
 				let j;
 
-				if($grid.type === editor.GridType.HEX_FLAT){
+				if($settings.grid.type === editor.GridType.HEX_FLAT){
 					i = pos.x;
 					j = pos.y;
 				}else{
@@ -508,19 +507,19 @@
 					j = pos.x;
 				}
 
-				const s = $grid.spacing * Math.sqrt(3) / 1.5;
+				const s = $settings.grid.spacing * Math.sqrt(3) / 1.5;
 
 				i /= s;
-				j = j * 1.5 / $grid.spacing - 1;
+				j = j * 1.5 / $settings.grid.spacing - 1;
 
 				let k = Math.floor(i - j);
 				let l = Math.floor((k + 2 * i + 1) / 3);
 				let m = Math.floor((k - j - i) / 3);
 
 				i = l * s - m * s / 2;
-				j = -m * $grid.spacing;
+				j = -m * $settings.grid.spacing;
 
-				if($grid.type === editor.GridType.HEX_FLAT){
+				if($settings.grid.type === editor.GridType.HEX_FLAT){
 					return {x: i, y: j};
 				}else{
 					return {x: j, y: i};
@@ -588,21 +587,21 @@
 	function drawGrid(){
 		ctx.fillStyle = $theme["editor-grid-color"];
 		ctx.beginPath();
-		switch($grid.type){
+		switch($settings.grid.type){
 		case editor.GridType.SQUARE:
-			for(let i = -$grid.size; i <= $grid.size; i++) {
-				for(let j = -$grid.size; j <= $grid.size; j++) {
+			for(let i = -$settings.grid.size; i <= $settings.grid.size; i++) {
+				for(let j = -$settings.grid.size; j <= $settings.grid.size; j++) {
 					addDot(i, j);
 				}
 			}
 			break;
 		case editor.GridType.HEX_FLAT:
 		case editor.GridType.HEX_POINTY:
-			for(let i = -$grid.size; i <= $grid.size; i++) {
-				for(let j = Math.max(0, -i) - $grid.size; j <= Math.min(0, -i) + $grid.size; j++){
+			for(let i = -$settings.grid.size; i <= $settings.grid.size; i++) {
+				for(let j = Math.max(0, -i) - $settings.grid.size; j <= Math.min(0, -i) + $settings.grid.size; j++){
 					const k = (j + i / 2) * Math.sqrt(3) / 1.5
 
-					if($grid.type === editor.GridType.HEX_FLAT){
+					if($settings.grid.type === editor.GridType.HEX_FLAT){
 						addDot(k, i);
 					}else{
 						addDot(i, k);
@@ -747,8 +746,8 @@
 
 	function addDot(x: number, y: number){
 		addCircle(
-			x * $grid.spacing,
-			y * $grid.spacing,
+			x * $settings.grid.spacing,
+			y * $settings.grid.spacing,
 			x === 0 && y === 0 ? 8 : 5
 		);
 	}
@@ -760,7 +759,7 @@
 
 	$: {
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		($grid, $project, $state, $theme);
+		($settings, $project, $state, $theme);
 
 		if(ctx !== undefined){
 			draw();

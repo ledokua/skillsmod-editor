@@ -8,7 +8,7 @@
 	import Spacer from "./lib/Spacer.svelte";
 	import Text from "./lib/Text.svelte";
 
-	let grid = getContext<Writable<editor.Grid>>("grid");
+	let settings = getContext<Writable<editor.Settings>>("settings");
 </script>
 
 <div class="container">
@@ -16,7 +16,7 @@
 		<Text>Type:</Text>
 		<Spacer />
 	</HStack>
-	<Select bind:value={$grid.type}>
+	<Select bind:value={$settings.grid.type}>
 		<option value={editor.GridType.NONE}>None</option>
 		<option value={editor.GridType.SQUARE}>Square</option>
 		<option value={editor.GridType.HEX_FLAT}>Hex: Flat</option>
@@ -26,12 +26,12 @@
 		<Text>Spacing:</Text>
 		<Spacer />
 	</HStack>
-	<IntegerInput bind:value={$grid.spacing} disabled={$grid.type === editor.GridType.NONE} />
+	<IntegerInput bind:value={$settings.grid.spacing} disabled={$settings.grid.type === editor.GridType.NONE} />
 	<HStack>
 		<Text>Size:</Text>
 		<Spacer />
 	</HStack>
-	<IntegerInput bind:value={$grid.size} disabled={$grid.type === editor.GridType.NONE} />
+	<IntegerInput bind:value={$settings.grid.size} disabled={$settings.grid.type === editor.GridType.NONE} />
 </div>
 
 
