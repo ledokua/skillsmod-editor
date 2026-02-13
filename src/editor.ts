@@ -68,7 +68,6 @@ export interface Settings {
 		normal: boolean;
 		exclusive: boolean;
 	};
-	renderHighlightedOnTop: boolean;
 }
 
 export interface State {
@@ -108,8 +107,7 @@ export function loadSettings(): Settings {
 			visibility: {
 				normal: !!settingsJson.visibility.normal,
 				exclusive: !!settingsJson.visibility.exclusive
-			},
-			renderHighlightedOnTop: settingsJson.renderHighlightedOnTop !== false
+			}
 		};
 	} catch {
 		return {
@@ -117,8 +115,7 @@ export function loadSettings(): Settings {
 			visibility: {
 				normal: true,
 				exclusive: true
-			},
-			renderHighlightedOnTop: true
+			}
 		}
 	}
 }

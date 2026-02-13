@@ -558,16 +558,8 @@
 		ctx.setTransform(viewScale, 0, 0, viewScale, viewPos.x + width / 2, viewPos.y + height / 2);
 
 		drawGrid();
-
-		if ($settings.renderHighlightedOnTop) {
-			drawConnections(false);
-			drawSkills();
-			drawConnections(true);
-		} else {
-			drawConnections(false);
-			drawConnections(true);
-			drawSkills();
-		}
+		drawConnections();
+		drawSkills();
 
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
 
@@ -676,42 +668,32 @@
 		ctx.fill();
 	}
 
-	function drawConnections(drawHighlighted: boolean){
+	function drawConnections(){
 		for(const connection of $project.connections){
-			const isHighlighted = selectedSkills.some(skill => connection.skills.includes(skill));
+			const isSelected = selectedSkills.some(skill => connection.skills.includes(skill));
 
-			if (isHighlighted !== drawHighlighted) {
-				continue;
-			}
-
-			if (isHighlighted) {
-				ctx.globalAlpha = 1;
-			} else {
-				ctx.globalAlpha = $settings.visibility[connection.type] ? 1 : 0.1;
-			}
+			ctx.globalAlpha = isSelected || $settings.visibility[connection.type] ? 1 : 0.1;
 
 			drawArrow(
 				connection.skills[0].pos,
 				connection.skills[1].pos,
 				connection.type,
-				connection.direction,
-				isHighlighted
+				connection.direction
 			);
 			ctx.globalAlpha = 1;
 		}
 
-		if(!drawHighlighted && previousSkill !== null){
+		if(previousSkill !== null){
 			drawArrow(
 				previousSkill.pos,
 				transformedMouse,
 				$state.selectedConnectionType,
-				$state.selectedConnectionDirection,
-				false
+				$state.selectedConnectionDirection
 			);
 		}
 	}
 
-	function drawArrow(start: editor.Position, end: editor.Position, type: editor.ConnectionType, direction: editor.ConnectionDirection, highlighted: boolean){
+	function drawArrow(start: editor.Position, end: editor.Position, type: editor.ConnectionType, direction: editor.ConnectionDirection){
 		switch(type){
 		case editor.ConnectionType.NORMAL:
 			ctx.strokeStyle = $theme["editor-normal-connection-color"];
@@ -721,7 +703,7 @@
 			break;
 		}
 
-		ctx.lineWidth = highlighted ? 6 : 3;
+		ctx.lineWidth = 3;
 		ctx.beginPath();
 		ctx.setLineDash([]);
 
