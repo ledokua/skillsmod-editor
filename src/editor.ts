@@ -110,7 +110,7 @@ export function loadSettings(): Settings {
 				normal: !!settingsJson.visibility.normal,
 				exclusive: !!settingsJson.visibility.exclusive
 			},
-			renderHighlightedOnTop: settingsJson.renderHighlightedOnTop !== false
+			renderHighlightedOnTop: settingsJson.renderHighlightedOnTop !== false,
 		};
 	} catch {
 		return {
@@ -119,7 +119,28 @@ export function loadSettings(): Settings {
 				normal: true,
 				exclusive: true
 			},
-			renderHighlightedOnTop: true
+			renderHighlightedOnTop: true,
+		}
+	}
+}
+
+export function saveGrid(grid: Grid) {
+	localStorage.setItem("grid", JSON.stringify(grid));
+}
+
+export function loadGrid(): Grid {
+	try {
+		const gridJson = JSON.parse(localStorage.getItem("grid") ?? "");
+		return {
+			type: gridJson.type ?? GridType.SQUARE,
+			spacing: gridJson.spacing ?? 32,
+			size: gridJson.size ?? 10,
+		};
+	} catch {
+		return {
+			type: GridType.SQUARE,
+			spacing: 32,
+			size: 10,
 		}
 	}
 }
