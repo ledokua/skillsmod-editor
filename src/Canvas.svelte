@@ -677,10 +677,8 @@
 	}
 
 	function drawConnections(drawHighlighted: boolean){
-		const singleSelectedSkill = selectedSkills.length === 1 ? selectedSkills[0] : null;
-
 		for(const connection of $project.connections){
-			const isHighlighted = singleSelectedSkill ? connection.skills.includes(singleSelectedSkill) : false;
+			const isHighlighted = selectedSkills.some(skill => connection.skills.includes(skill));
 
 			if (isHighlighted !== drawHighlighted) {
 				continue;
