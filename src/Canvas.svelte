@@ -678,7 +678,8 @@
 				connection.skills[0].pos,
 				connection.skills[1].pos,
 				connection.type,
-				connection.direction
+				connection.direction,
+				isSelected
 			);
 			ctx.globalAlpha = 1;
 		}
@@ -688,12 +689,25 @@
 				previousSkill.pos,
 				transformedMouse,
 				$state.selectedConnectionType,
-				$state.selectedConnectionDirection
+				$state.selectedConnectionDirection,
+				false
 			);
 		}
 	}
 
-	function drawArrow(start: editor.Position, end: editor.Position, type: editor.ConnectionType, direction: editor.ConnectionDirection){
+	function drawArrow(start: editor.Position, end: editor.Position, type: editor.ConnectionType, direction: editor.ConnectionDirection, isSelected: boolean){
+		ctx.beginPath();
+
+		ctx.moveTo(start.x, start.y);
+		ctx.lineTo(end.x, end.y);
+
+		if (isSelected) {
+			ctx.setLineDash([3, 3]);
+			ctx.strokeStyle = $theme["editor-selection-border-color"];
+			ctx.lineWidth = 3 + 4;
+			ctx.stroke();
+		}
+
 		switch(type){
 		case editor.ConnectionType.NORMAL:
 			ctx.strokeStyle = $theme["editor-normal-connection-color"];
@@ -704,13 +718,14 @@
 		}
 
 		ctx.lineWidth = 3;
-		ctx.beginPath();
 		ctx.setLineDash([]);
-
-		ctx.moveTo(start.x, start.y);
-		ctx.lineTo(end.x, end.y);
-
 		ctx.stroke();
+
+		if (isSelected) {
+			ctx.strokeStyle = $theme["editor-selection-background-color"];
+			ctx.lineWidth = 3 + 2;
+			ctx.stroke();
+		}
 
 		if (direction === editor.ConnectionDirection.UNIDIRECTIONAL) {
 			switch(type){
@@ -744,6 +759,11 @@
 			ctx.lineTo(backX + sideX, backY + sideY);
 			ctx.closePath();
 			ctx.fill();
+
+			if (isSelected) {
+				ctx.fillStyle = $theme["editor-selection-background-color"];
+				ctx.fill();
+			}
 		}
 	}
 
