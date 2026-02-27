@@ -55,7 +55,9 @@ export interface Grid {
 	type: GridType;
 	spacing: number;
 	size: number;
-}
+	count: number;
+	group: number;
+};
 
 export interface Project {
 	definitions: Definition[];
